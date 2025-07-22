@@ -1,0 +1,16 @@
+{
+  "name": "Calculateur Carburant",
+  "short_name": "Carburant",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#1E1E1E",
+  "theme_color": "#121212",
+  "description": "Un simple calculateur de consommation de carburant.",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}

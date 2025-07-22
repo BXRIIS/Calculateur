@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#121212">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculateur de Consommation v3 - Monochrome</title>
+    <style>
+        /* --- Importation d'une police moderne --- */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap');
+
+        /* --- Thème "Monochrome" avec Variables CSS --- */
+        :root {
+            --bg-color: #121212;
+            --surface-color: #1E1E1E;
+            --text-primary: #E0E0E0;
+            --text-secondary: #AAAAAA;
+            /* Couleur d'accentuation changée pour un gris clair */
+            --accent-color: #BDBDBD; 
+            --border-color: #444444;
+            /* Ombre portée changée pour correspondre à la nouvelle couleur */
+            --shadow-color: rgba(189, 189, 189, 0.15); 
+        }
+
+        /* --- Réinitialisation et styles de base --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            background-color: var(--surface-color);
+            padding: 35px;
+            border-radius: 15px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+
+        header h1 {
+            font-size: 1.8em;
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+        
+        .input-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .input-wrapper .icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            pointer-events: none;
+        }
+        
+        .input-wrapper input {
+            width: 100%;
+            padding: 15px 15px 15px 50px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .input-wrapper input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 10px var(--shadow-color);
+        }
+
+        button {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 8px;
+            background-color: var(--accent-color);
+            /* Couleur du texte du bouton changée en noir pour le contraste */
+            color: var(--bg-color); 
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: transform 0.2s, box-shadow 0.3s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+
+        .result {
+            margin-top: 30px;
+            background-color: var(--bg-color);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            display: none;
+        }
+
+        .result.visible {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .result h2 {
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .result p {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .result span {
+            font-weight: 700;
+            font-size: 1.5em;
+            color: var(--accent-color);
+            display: block;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Analyse Carburant</h1>
+        </header>
+        <main>
+            <div class="input-wrapper">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg>
+                <input type="number" id="distance" placeholder="Distance (km)">
+            </div>
+            <div class="input-wrapper">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 8h-4v9h4V8z"/><path d="M6 8h-2v9h2V8z"/><path d="M20 8h-2v9h2V8z"/><path d="M17.4 4.2c.8.8.8 2 0 2.8l-1.4 1.4c-.8.8-2 .8-2.8 0L9 4.2c-.8-.8-.8-2 0-2.8s2-.8 2.8 0l4.2 4.2c.8.8.8 2 0 2.8L14.6 10"/></svg>
+                <input type="number" id="litres" placeholder="Carburant (litres)">
+            </div>
+            <div class="input-wrapper">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-2-9h4v2h-4v-2zm0 4h4v2h-4v-2z"/></svg>
+                <input type="number" id="prix" step="0.01" placeholder="Prix au litre (€)">
+            </div>
+            <button id="calculer">Analyser</button>
+            <div class="result" id="resultat">
+                <h2>Résultats de l'analyse</h2>
+                <p>Consommation moyenne<span id="conso-l-100km">0</span></p>
+                <p>Coût total estimé<span id="cout-trajet">0</span></p>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Le JavaScript reste identique
+        const distanceInput = document.getElementById('distance');
+        const litresInput = document.getElementById('litres');
+        const prixInput = document.getElementById('prix');
+        const calculerBtn = document.getElementById('calculer');
+        const resultatDiv = document.getElementById('resultat');
+        const consoSpan = document.getElementById('conso-l-100km');
+        const coutSpan = document.getElementById('cout-trajet');
+
+        calculerBtn.addEventListener('click', () => {
+            const distance = parseFloat(distanceInput.value);
+            const litres = parseFloat(litresInput.value);
+            const prix = parseFloat(prixInput.value);
+
+            if (distance > 0 && litres > 0) {
+                const consommation = (litres / distance) * 100;
+                consoSpan.textContent = consommation.toFixed(2) + ' L/100km';
+
+                if (prix > 0) {
+                    const cout = litres * prix;
+                    coutSpan.textContent = cout.toFixed(2) + ' €';
+                } else {
+                    coutSpan.textContent = 'N/A';
+                }
+
+                resultatDiv.classList.add('visible');
+            } else {
+                alert("Veuillez entrer des valeurs valides pour la distance et le carburant.");
+            }
+        });
+    </script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').then(registration => {
+        console.log('SW registered: ', registration);
+      }).catch(registrationError => {
+        console.log('SW registration failed: ', registrationError);
+      });
+    });
+  }
+</script>
+
+
+</body>
+</html>
